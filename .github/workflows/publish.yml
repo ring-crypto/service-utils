@@ -1,0 +1,40 @@
+name: Publish to NPM
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Trigger on tags like v1.0.0, v0.1.2, etc.
+
+jobs:
+  publish-npm:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # Needed to check out the repository
+      # id-token: write # Optional: if using OIDC for npm publish
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your preferred LTS Node.js version
+          registry-url: 'https://registry.npmjs.org/' # Important for npm publish
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8 # Or your preferred pnpm version
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Build
+        run: pnpm build
+
+      - name: Publish to NPM
+        run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

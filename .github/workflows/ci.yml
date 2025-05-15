@@ -1,0 +1,35 @@
+name: CI Checks
+
+on:
+  pull_request:
+    branches: [main] # Or your default branch if it's different
+
+jobs:
+  build_and_check:
+    name: Build and Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your preferred LTS Node.js version
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8 # Or your preferred pnpm version
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Type Check
+        run: pnpm typecheck
+
+      - name: Run Build
+        run: pnpm build
