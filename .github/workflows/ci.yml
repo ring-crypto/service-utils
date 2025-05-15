@@ -1,8 +1,10 @@
 name: CI Checks
 
-on:
-  pull_request:
-    branches: [main] # Or your default branch if it's different
+on: [push] # Trigger on any push to any branch
+
+# on:
+#  pull_request:
+#    branches: [main] # Or your default branch if it's different
 
 jobs:
   build_and_check:
